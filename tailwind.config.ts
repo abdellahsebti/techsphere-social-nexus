@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -124,6 +123,22 @@ module.exports = {
           from: { transform: "scale(0.95)", opacity: "0" },
           to: { transform: "scale(1)", opacity: "1" },
         },
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        spinSlow: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -132,9 +147,26 @@ module.exports = {
         "slideUp": "slideUp 0.8s ease forwards",
         "slideIn": "slideIn 0.8s ease forwards",
         "scaleIn": "scaleIn 0.5s ease forwards",
+        "pulse-slow": "pulse 3s ease-in-out infinite",
+        "shimmer": "shimmer 2s linear infinite",
+        "float": "float 3s ease-in-out infinite",
+        "spin-slow": "spinSlow 3s linear infinite"
       },
       boxShadow: {
         'glow': '0 0 15px 0 rgba(var(--color-primary), 0.5)',
+        'glow-lg': '0 0 30px 0 rgba(var(--color-primary), 0.3)',
+        'inner-glow': 'inset 0 0 15px 0 rgba(var(--color-primary), 0.2)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-shine': 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+      },
+      transitionDuration: {
+        '400': '400ms',
+      },
+      transitionTimingFunction: {
+        'bounce-sm': 'cubic-bezier(0.4, 2.5, 0.55, 0.9)',
       },
     },
   },

@@ -9,57 +9,35 @@ const About = () => {
     {
       name: "Instagram",
       icon: Instagram,
-      url: "https://instagram.com/your_instagram",
+      url: "https://instagram.com/abdellah_sebti",
       color: "text-pink-500 hover:text-pink-600",
       bgColor: "hover:bg-pink-500/10",
     },
     {
       name: "LinkedIn",
       icon: Linkedin,
-      url: "https://linkedin.com/in/your_linkedin",
+      url: "https://linkedin.com/in/abdellah-sebti",
       color: "text-blue-500 hover:text-blue-600",
       bgColor: "hover:bg-blue-500/10",
     },
     {
       name: "WhatsApp",
       icon: MessageCircle,
-      url: "https://wa.me/your_whatsapp",
+      url: "https://wa.me/213541174197",
       color: "text-green-500 hover:text-green-600",
       bgColor: "hover:bg-green-500/10",
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
-    <motion.div
-      className="min-h-screen bg-gradient-to-b from-background to-background/95 py-16 px-4"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/95 py-16 px-4">
       <div className="max-w-4xl mx-auto">
-        <motion.div variants={itemVariants} className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
           <h1 className="text-5xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent mb-6">
             About TechSphere Social
           </h1>
@@ -70,7 +48,9 @@ const About = () => {
         </motion.div>
 
         <motion.div 
-          variants={itemVariants}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="grid gap-8 md:grid-cols-2 mb-16"
         >
           <Card className="group hover:shadow-lg transition-all duration-300 border border-border/50 bg-card/50 backdrop-blur-sm">
@@ -102,35 +82,45 @@ const About = () => {
           </Card>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <Card className="overflow-hidden border border-border/50 bg-card/50 backdrop-blur-sm">
-            <CardHeader>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="overflow-hidden border border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <CardHeader className="border-b border-border/50">
               <CardTitle className="text-center text-2xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent">
                 Meet the Developer
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-8">
               <div className="flex flex-col items-center space-y-6">
                 <motion.div
-                  className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-tech-blue/50 hover:border-tech-blue transition-colors duration-300"
+                  className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-tech-blue/50 hover:border-tech-blue transition-colors duration-300 shadow-lg"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <img
-                    src="/abdellah.jpg"
-                    alt="Sebti Abdellah"
-                    className="w-full h-full object-cover"
-                  />
+                  <picture>
+                    <source srcSet="/abdellah.webp" type="image/webp" />
+                    <img
+                      src="/abdellah.jpg"
+                      alt="Sebti Abdellah"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      width="400"
+                      height="400"
+                    />
+                  </picture>
                 </motion.div>
                 <div className="text-center">
-                  <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent">
+                  <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent">
                     Sebti Abdellah
                   </h2>
-                  <p className="text-muted-foreground mb-6 flex items-center justify-center gap-2">
-                    Student at ENSTSA
-                    <ExternalLink className="h-4 w-4" />
+                  <p className="text-lg text-muted-foreground mb-6 flex items-center justify-center gap-2 hover:text-foreground transition-colors">
+                    <span>Student at ENSTSA</span>
+                    <ExternalLink className="h-4 w-4 animate-pulse" />
                   </p>
-                  <div className="flex justify-center space-x-4">
+                  <div className="flex justify-center space-x-6">
                     {socialLinks.map((social) => (
                       <motion.div
                         key={social.name}
@@ -140,10 +130,12 @@ const About = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className={`rounded-full ${social.color} ${social.bgColor} transition-colors duration-300`}
+                          className={`rounded-full ${social.color} ${social.bgColor} transition-colors duration-300 shadow-sm hover:shadow-md`}
                           onClick={() => window.open(social.url, "_blank")}
+                          title={social.name}
                         >
                           <social.icon className="h-5 w-5" />
+                          <span className="sr-only">{social.name}</span>
                         </Button>
                       </motion.div>
                     ))}
@@ -154,7 +146,7 @@ const About = () => {
           </Card>
         </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
