@@ -6,11 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { 
   Search, 
-  Bell, 
   MessageSquare, 
   Award, 
   Trophy, 
-  Menu 
+  Menu,
+  Sun,
+  Moon 
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,8 +21,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { NotificationCenter } from "@/components/ui/notification-center";
+import { useAppContext } from "@/context/AppContext";
 
 const Navbar = () => {
+  const { darkMode, toggleDarkMode } = useAppContext();
+
   return (
     <nav className="sticky top-0 z-40 w-full backdrop-blur-sm bg-background/90 border-b">
       <div className="container flex h-16 items-center justify-between py-4">
@@ -59,10 +64,16 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-tech-red"></span>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleDarkMode}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
+            
+            <NotificationCenter />
             
             <Button variant="ghost" size="icon">
               <MessageSquare className="h-5 w-5" />

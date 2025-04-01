@@ -5,11 +5,14 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import ChallengesSection from "@/components/home/ChallengesSection";
+import TrendingProjects from "@/components/home/TrendingProjects";
+import StatsSection from "@/components/home/StatsSection";
 import ProjectCard from "@/components/projects/ProjectCard";
 import LeaderboardCard from "@/components/leaderboard/LeaderboardCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "@/context/AppContext";
 
 // Sample data for demonstration
 const featuredProjects = [
@@ -42,6 +45,54 @@ const featuredProjects = [
     likesCount: 96,
     commentsCount: 28,
     createdAt: "1 week ago"
+  }
+];
+
+const trendingProjects = [
+  {
+    id: "tp1",
+    title: "AI-Powered Energy Optimization",
+    description: "A machine learning system that optimizes energy usage in smart buildings, reducing costs by up to 30%.",
+    author: {
+      id: "u5",
+      name: "Maria Rodriguez",
+      avatar: "https://i.pravatar.cc/150?img=6",
+      school: "ENSAI - Artificial Intelligence"
+    },
+    tags: ["AI", "Energy", "IoT"],
+    likesCount: 156,
+    commentsCount: 47,
+    createdAt: "1 day ago"
+  },
+  {
+    id: "tp2",
+    title: "Blockchain Voting System",
+    description: "A secure, transparent voting platform built on blockchain technology for organizational elections.",
+    author: {
+      id: "u3",
+      name: "Michael Zhang",
+      avatar: "https://i.pravatar.cc/150?img=3",
+      school: "ENSBS - Blockchain Studies"
+    },
+    tags: ["Blockchain", "Security", "Web3"],
+    likesCount: 143,
+    commentsCount: 31,
+    createdAt: "3 days ago"
+  },
+  {
+    id: "tp3",
+    title: "AR Learning Environment",
+    description: "An augmented reality application that transforms any space into an interactive learning environment.",
+    author: {
+      id: "u7",
+      name: "James Rodriguez",
+      avatar: "https://i.pravatar.cc/150?img=4",
+      school: "ENSBS - AR Studies"
+    },
+    tags: ["AR", "Education", "Mobile"],
+    likesCount: 121,
+    commentsCount: 26,
+    createdAt: "4 days ago"
   }
 ];
 
@@ -113,13 +164,28 @@ const leaderboardUsers = [
 ];
 
 const Index = () => {
+  const { addNotification } = useAppContext();
+
+  const handleJoinChallenge = () => {
+    addNotification({
+      id: Math.random().toString(36).substring(7),
+      title: "Challenge Joined!",
+      message: "You've successfully joined the latest challenge. Check your profile for details.",
+      type: "success",
+      read: false
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow">
         <Hero />
+        <StatsSection />
         <Features />
+        
+        <TrendingProjects projects={trendingProjects} />
         
         {/* Featured Projects Section */}
         <section className="py-16 bg-muted/50">
@@ -145,7 +211,7 @@ const Index = () => {
           </div>
         </section>
         
-        <ChallengesSection />
+        <ChallengesSection onJoinChallenge={handleJoinChallenge} />
         
         {/* Ideas & Leaderboard Section */}
         <section className="py-16">
