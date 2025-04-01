@@ -17,73 +17,69 @@ import {
   SortAsc,
   SortDesc,
   ChevronRight,
+  BookOpen,
   Code,
-  GitBranch,
-  Star,
-  Users,
-  Globe,
-  MessageSquare
+  Lightbulb,
+  Trophy,
+  Zap
 } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 
 // Mock Data
-const mockProjects = [
+const mockPosts = [
   {
-    id: "p1",
-    title: "Quantum Machine Learning Framework",
-    description: "A framework that combines quantum computing principles with machine learning algorithms to enhance predictive capabilities.",
+    id: "b1",
+    title: "The Future of Quantum Computing in Education",
+    excerpt: "Explore how quantum computing is revolutionizing the way we teach and learn computer science, from basic concepts to advanced applications.",
+    content: "Quantum computing represents a paradigm shift in how we process information...",
     author: {
-      id: "u1",
-      name: "Alex Chen",
+      name: "Dr. Emily Foster",
       avatar: "https://i.pravatar.cc/150?img=1",
-      school: "ENSCS - Computer Science"
+      role: "Research Lead"
     },
-    tags: ["Quantum", "Machine Learning", "Python"],
-    likesCount: 128,
-    commentsCount: 42,
-    createdAt: "2 days ago",
-    stars: 45,
-    contributors: 12,
-    techStack: ["Python", "TensorFlow", "Qiskit"],
-    status: "active"
+    date: "2024-03-15",
+    readTime: "5 min read",
+    category: "Technology",
+    tags: ["Quantum Computing", "Education", "Future Tech"],
+    likes: 128,
+    comments: 42,
+    image: "https://picsum.photos/800/400"
   },
   {
-    id: "p2",
-    title: "Autonomous Drone Navigation System",
-    description: "A navigation system for drones that uses computer vision and sensor fusion for autonomous operation in GPS-denied environments.",
+    id: "b2",
+    title: "Building Sustainable Tech Solutions",
+    excerpt: "Learn about the latest trends in sustainable technology and how students can contribute to a greener future through innovative projects.",
+    content: "As the world faces increasing environmental challenges...",
     author: {
-      id: "u2",
       name: "Sarah Johnson",
       avatar: "https://i.pravatar.cc/150?img=5",
-      school: "ENSNN - Neural Networks"
+      role: "Sustainability Expert"
     },
-    tags: ["Robotics", "Computer Vision", "C++"],
-    likesCount: 96,
-    commentsCount: 28,
-    createdAt: "1 week ago",
-    stars: 38,
-    contributors: 8,
-    techStack: ["C++", "OpenCV", "ROS"],
-    status: "active"
-  },
-  
+    date: "2024-03-10",
+    readTime: "4 min read",
+    category: "Sustainability",
+    tags: ["Green Tech", "Innovation", "Environment"],
+    likes: 96,
+    comments: 28,
+    image: "https://picsum.photos/800/400"
+  }
 ];
 
-const ProjectCard = ({ project, index }) => {
+const BlogCard = ({ post, index }) => {
   const { darkMode } = useAppContext();
-  const { favorites, toggleFavorite } = useAppContext();
+  const [isSaved, setIsSaved] = useState(false);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       className={`group relative overflow-hidden rounded-lg ${
         darkMode 
           ? "bg-gradient-to-r from-slate-800/50 to-slate-900/50 hover:from-tech-blue/10 hover:to-tech-purple/10"
           : "bg-gradient-to-r from-background to-background/80 hover:from-tech-blue/5 hover:to-tech-purple/5"
-      } p-4 transition-all duration-300`}
+      } transition-all duration-300`}
     >
       {/* Enhanced shimmer effect */}
       <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${
@@ -91,64 +87,92 @@ const ProjectCard = ({ project, index }) => {
       } to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000`} />
       
       <div className="relative">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-lg font-semibold mb-1">{project.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-          </div>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => toggleFavorite(project.id)}
-            className={`h-8 w-8 rounded-full transition-all ${
-              favorites.includes(project.id) ? "text-yellow-500 hover:text-yellow-600" : "text-muted-foreground"
-            }`}
+        {/* Featured Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img 
+            src={post.image} 
+            alt={post.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <Badge 
+            variant="secondary" 
+            className="absolute top-4 left-4"
           >
-            <Star className="h-[18px] w-[18px]" fill={favorites.includes(project.id) ? "currentColor" : "none"} />
-          </Button>
+            {post.category}
+          </Badge>
         </div>
 
-        <div className="flex items-center gap-2 mb-4">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src={project.author.avatar} alt={project.author.name} />
-            <AvatarFallback>{project.author.name[0]}</AvatarFallback>
-          </Avatar>
-          <span className="text-sm text-muted-foreground">{project.author.name}</span>
-          <span className="text-sm text-muted-foreground">•</span>
-          <span className="text-sm text-muted-foreground">{project.author.school}</span>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag, i) => (
-            <Badge 
-              key={i}
-              variant="secondary"
-              className={`${
-                darkMode ? "bg-slate-700/50" : "bg-muted"
-              }`}
+        {/* Content */}
+        <div className="p-4">
+          {/* Header */}
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-lg font-semibold mb-1">{post.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsSaved(!isSaved)}
+              className={`h-8 w-8 ${isSaved ? "text-tech-yellow" : ""}`}
             >
-              {tag}
-            </Badge>
-          ))}
-        </div>
+              <Bookmark className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
+            </Button>
+          </div>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-4">
+          {/* Author Info */}
+          <div className="flex items-center gap-2 mb-4">
+            <Avatar className="h-6 w-6">
+              <AvatarImage src={post.author.avatar} alt={post.author.name} />
+              <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+            </Avatar>
+            <span className="text-sm text-muted-foreground">{post.author.name}</span>
+            <span className="text-sm text-muted-foreground">•</span>
+            <span className="text-sm text-muted-foreground">{post.author.role}</span>
+          </div>
+
+          {/* Meta Info */}
+          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
             <div className="flex items-center gap-1">
-              <Star className="h-4 w-4" />
-              <span>{project.stars}</span>
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(post.date).toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span>{project.contributors}</span>
+              <Clock className="h-4 w-4" />
+              <span>{post.readTime}</span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MessageSquare className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Share2 className="h-4 w-4" />
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {post.tags.map((tag, i) => (
+              <Badge 
+                key={i}
+                variant="secondary"
+                className={`${
+                  darkMode ? "bg-slate-700/50" : "bg-muted"
+                }`}
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Bookmark className="h-4 w-4" />
+                <span>{post.likes}</span>
+              </Button>
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Share2 className="h-4 w-4" />
+                <span>{post.comments}</span>
+              </Button>
+            </div>
+            <Button variant="outline" size="sm">
+              Read More
             </Button>
           </div>
         </div>
@@ -157,7 +181,7 @@ const ProjectCard = ({ project, index }) => {
   );
 };
 
-const Projects = () => {
+const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
@@ -186,7 +210,7 @@ const Projects = () => {
                 : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
             }`}
           >
-            Projects
+            Blog
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -194,13 +218,13 @@ const Projects = () => {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground max-w-2xl mx-auto"
           >
-            Discover innovative projects, collaborate with others, and showcase your work
+            Discover insights, tutorials, and stories from the tech community
           </motion.p>
           
           <div className="relative max-w-xl mx-auto mt-6">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search projects..."
+              placeholder="Search articles..."
               className={`pl-10 backdrop-blur-sm ${
                 darkMode ? "bg-slate-800/50" : "bg-background/50"
               }`}
@@ -217,9 +241,9 @@ const Projects = () => {
               darkMode ? "bg-slate-800/50" : "bg-background/50"
             }`}>
               <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="featured">Featured</TabsTrigger>
-              <TabsTrigger value="trending">Trending</TabsTrigger>
-              <TabsTrigger value="recent">Recent</TabsTrigger>
+              <TabsTrigger value="technology">Technology</TabsTrigger>
+              <TabsTrigger value="sustainability">Sustainability</TabsTrigger>
+              <TabsTrigger value="education">Education</TabsTrigger>
             </TabsList>
           </Tabs>
 
@@ -239,10 +263,10 @@ const Projects = () => {
           </div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+        {/* Blog Posts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {mockPosts.map((post, index) => (
+            <BlogCard key={post.id} post={post} index={index} />
           ))}
         </div>
 
@@ -258,4 +282,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Blog; 

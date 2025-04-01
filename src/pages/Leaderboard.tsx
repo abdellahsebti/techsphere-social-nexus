@@ -1,17 +1,33 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
-  Search, Trophy, Medal, Star, Award, Crown,
-  TrendingUp, School, Globe, Users, Zap, Target,
-  Sparkles, Flame, ChevronRight, ChevronLeft
+  Search, 
+  Calendar, 
+  Clock, 
+  Bookmark,
+  Share2,
+  MoreHorizontal,
+  Filter,
+  SortAsc,
+  SortDesc,
+  ChevronRight,
+  Trophy,
+  Medal,
+  Award,
+  Star,
+  Crown,
+  Sparkles,
+  Users,
+  School,
+  Zap,
+  Flame,
+  Target
 } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 
@@ -442,8 +458,6 @@ const Leaderboard = () => {
         ? "bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950"
         : "bg-gradient-to-b from-background via-background/95 to-background"
     }`}>
-      <Navbar />
-      
       <main className="flex-grow py-6">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -485,7 +499,7 @@ const Leaderboard = () => {
               />
             </div>
           </div>
-          
+
           <Tabs defaultValue="individual" className="mb-8" onValueChange={setActiveTab}>
             <TabsList className={`grid w-full grid-cols-3 max-w-md mx-auto backdrop-blur-sm ${
               darkMode ? "bg-slate-800/50" : "bg-background/50"
@@ -652,8 +666,6 @@ const Leaderboard = () => {
           </Tabs>
         </motion.div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

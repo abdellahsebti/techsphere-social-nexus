@@ -1,29 +1,28 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { 
   Search, 
-  Trophy, 
-  Users, 
   Calendar, 
   Clock, 
-  Award,
-  Sparkles,
-  Code,
-  Lightbulb,
-  Zap,
+  Bookmark,
+  Share2,
+  MoreHorizontal,
   Filter,
   SortAsc,
   SortDesc,
-  ChevronRight
+  ChevronRight,
+  Trophy,
+  Target,
+  Award,
+  Medal,
+  Star
 } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 
@@ -196,104 +195,98 @@ const Challenges = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
   const { darkMode } = useAppContext();
-
+  
   return (
     <div className={`min-h-screen flex flex-col ${
       darkMode 
         ? "bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950"
         : "bg-gradient-to-b from-background via-background/95 to-background"
     }`}>
-      <Navbar />
-      
-      <main className="flex-grow py-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="container px-4 md:px-6"
-        >
-          {/* Header Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="container px-4 md:px-6"
+      >
+        {/* Header Section */}
           <div className="text-center mb-10">
-            <motion.h1 
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className={`text-5xl font-bold mb-2 ${
-                darkMode
-                  ? "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-                  : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-              }`}
-            >
-              Challenges
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-muted-foreground max-w-2xl mx-auto"
-            >
-              Participate in exciting challenges, showcase your skills, and win rewards
-            </motion.p>
+          <motion.h1 
+            initial={{ scale: 0.5 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className={`text-5xl font-bold mb-2 ${
+              darkMode
+                ? "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
+                : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
+            }`}
+          >
+            Challenges
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-muted-foreground max-w-2xl mx-auto"
+          >
+            Participate in exciting challenges, showcase your skills, and win rewards
+          </motion.p>
             
             <div className="relative max-w-xl mx-auto mt-6">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search challenges..."
-                className={`pl-10 backdrop-blur-sm ${
-                  darkMode ? "bg-slate-800/50" : "bg-background/50"
-                }`}
+              className={`pl-10 backdrop-blur-sm ${
+                darkMode ? "bg-slate-800/50" : "bg-background/50"
+              }`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
+          
+        {/* Filters and Tabs */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+          <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+            <TabsList className={`grid w-full grid-cols-4 max-w-md mx-auto backdrop-blur-sm ${
+              darkMode ? "bg-slate-800/50" : "bg-background/50"
+            }`}>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="active">Active</TabsTrigger>
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="completed">Completed</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
-          {/* Filters and Tabs */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
-              <TabsList className={`grid w-full grid-cols-4 max-w-md mx-auto backdrop-blur-sm ${
-                darkMode ? "bg-slate-800/50" : "bg-background/50"
-              }`}>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-                <TabsTrigger value="completed">Completed</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Filter className="h-4 w-4" />
-                Filter
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                {sortBy === "recent" ? (
-                  <SortDesc className="h-4 w-4" />
-                ) : (
-                  <SortAsc className="h-4 w-4" />
-                )}
-                Sort
-              </Button>
-            </div>
-          </div>
-
-          {/* Challenges Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {mockChallenges.map((challenge, index) => (
-              <ChallengeCard key={challenge.id} challenge={challenge} index={index} />
-            ))}
-          </div>
-
-          {/* Load More Button */}
-          <div className="text-center mt-8">
-            <Button variant="outline" className="gap-2">
-              Load More
-              <ChevronRight className="h-4 w-4" />
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Filter
+            </Button>
+            <Button variant="outline" size="sm" className="gap-2">
+              {sortBy === "recent" ? (
+                <SortDesc className="h-4 w-4" />
+              ) : (
+                <SortAsc className="h-4 w-4" />
+              )}
+              Sort
             </Button>
           </div>
-        </motion.div>
-      </main>
-      
-      <Footer />
+        </div>
+
+        {/* Challenges Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {mockChallenges.map((challenge, index) => (
+            <ChallengeCard key={challenge.id} challenge={challenge} index={index} />
+            ))}
+          </div>
+          
+        {/* Load More Button */}
+        <div className="text-center mt-8">
+          <Button variant="outline" className="gap-2">
+            Load More
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </motion.div>
     </div>
   );
 };

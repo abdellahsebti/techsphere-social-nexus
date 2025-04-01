@@ -17,68 +17,77 @@ import {
   SortAsc,
   SortDesc,
   ChevronRight,
-  Code,
-  GitBranch,
-  Star,
+  CalendarDays,
+  MapPin,
   Users,
-  Globe,
-  MessageSquare
+  Ticket,
+  Video
 } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 
 // Mock Data
-const mockProjects = [
+const mockEvents = [
   {
-    id: "p1",
-    title: "Quantum Machine Learning Framework",
-    description: "A framework that combines quantum computing principles with machine learning algorithms to enhance predictive capabilities.",
-    author: {
-      id: "u1",
-      name: "Alex Chen",
+    id: "e1",
+    title: "Tech Career Fair 2024",
+    description: "Connect with leading tech companies and explore internship opportunities. Network with industry professionals and showcase your skills.",
+    date: "2024-05-15",
+    time: "10:00 AM - 4:00 PM",
+    location: "Virtual Event",
+    type: "virtual",
+    attendees: 250,
+    maxAttendees: 500,
+    organizer: {
+      name: "Career Services",
       avatar: "https://i.pravatar.cc/150?img=1",
-      school: "ENSCS - Computer Science"
+      role: "Event Coordinator"
     },
-    tags: ["Quantum", "Machine Learning", "Python"],
-    likesCount: 128,
-    commentsCount: 42,
-    createdAt: "2 days ago",
-    stars: 45,
-    contributors: 12,
-    techStack: ["Python", "TensorFlow", "Qiskit"],
-    status: "active"
+    tags: ["Career", "Networking", "Virtual"],
+    status: "upcoming"
   },
   {
-    id: "p2",
-    title: "Autonomous Drone Navigation System",
-    description: "A navigation system for drones that uses computer vision and sensor fusion for autonomous operation in GPS-denied environments.",
-    author: {
-      id: "u2",
-      name: "Sarah Johnson",
+    id: "e2",
+    title: "AI & Machine Learning Workshop",
+    description: "Hands-on workshop on building and deploying machine learning models. Learn from industry experts and get practical experience.",
+    date: "2024-04-20",
+    time: "2:00 PM - 5:00 PM",
+    location: "ENSCS Building, Room 301",
+    type: "in-person",
+    attendees: 45,
+    maxAttendees: 50,
+    organizer: {
+      name: "AI Research Lab",
       avatar: "https://i.pravatar.cc/150?img=5",
-      school: "ENSNN - Neural Networks"
+      role: "Research Lead"
     },
-    tags: ["Robotics", "Computer Vision", "C++"],
-    likesCount: 96,
-    commentsCount: 28,
-    createdAt: "1 week ago",
-    stars: 38,
-    contributors: 8,
-    techStack: ["C++", "OpenCV", "ROS"],
-    status: "active"
-  },
-  
+    tags: ["AI/ML", "Workshop", "In-Person"],
+    status: "upcoming"
+  }
 ];
 
-const ProjectCard = ({ project, index }) => {
+const EventCard = ({ event, index }) => {
   const { darkMode } = useAppContext();
-  const { favorites, toggleFavorite } = useAppContext();
+  const [isSaved, setIsSaved] = useState(false);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "upcoming":
+        return "text-tech-green";
+      case "ongoing":
+        return "text-tech-blue";
+      case "past":
+        return "text-muted-foreground";
+      default:
+        return "text-muted-foreground";
+    }
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       className={`group relative overflow-hidden rounded-lg ${
         darkMode 
           ? "bg-gradient-to-r from-slate-800/50 to-slate-900/50 hover:from-tech-blue/10 hover:to-tech-purple/10"
@@ -91,35 +100,56 @@ const ProjectCard = ({ project, index }) => {
       } to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000`} />
       
       <div className="relative">
+        {/* Header */}
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-lg font-semibold mb-1">{project.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+            <h3 className="text-lg font-semibold mb-1">{event.title}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>
           </div>
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => toggleFavorite(project.id)}
-            className={`h-8 w-8 rounded-full transition-all ${
-              favorites.includes(project.id) ? "text-yellow-500 hover:text-yellow-600" : "text-muted-foreground"
-            }`}
+            onClick={() => setIsSaved(!isSaved)}
+            className={`h-8 w-8 ${isSaved ? "text-tech-yellow" : ""}`}
           >
-            <Star className="h-[18px] w-[18px]" fill={favorites.includes(project.id) ? "currentColor" : "none"} />
+            <Bookmark className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>
 
+        {/* Organizer Info */}
         <div className="flex items-center gap-2 mb-4">
           <Avatar className="h-6 w-6">
-            <AvatarImage src={project.author.avatar} alt={project.author.name} />
-            <AvatarFallback>{project.author.name[0]}</AvatarFallback>
+            <AvatarImage src={event.organizer.avatar} alt={event.organizer.name} />
+            <AvatarFallback>{event.organizer.name[0]}</AvatarFallback>
           </Avatar>
-          <span className="text-sm text-muted-foreground">{project.author.name}</span>
+          <span className="text-sm text-muted-foreground">{event.organizer.name}</span>
           <span className="text-sm text-muted-foreground">•</span>
-          <span className="text-sm text-muted-foreground">{project.author.school}</span>
+          <span className="text-sm text-muted-foreground">{event.organizer.role}</span>
         </div>
 
+        {/* Event Details */}
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center gap-2 text-sm">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span>{new Date(event.date).toLocaleDateString()}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span>{event.time}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            {event.type === "virtual" ? (
+              <Video className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span>{event.location}</span>
+          </div>
+        </div>
+
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag, i) => (
+          {event.tags.map((tag, i) => (
             <Badge 
               key={i}
               variant="secondary"
@@ -130,34 +160,27 @@ const ProjectCard = ({ project, index }) => {
               {tag}
             </Badge>
           ))}
+          <Badge variant="outline" className={getStatusColor(event.status)}>
+            {event.status}
+          </Badge>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4" />
-              <span>{project.stars}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span>{project.contributors}</span>
-            </div>
+        {/* Footer */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Users className="h-4 w-4" />
+            <span>{event.attendees}/{event.maxAttendees} attendees</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MessageSquare className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button variant="outline" size="sm">
+            Register
+          </Button>
         </div>
       </div>
     </motion.div>
   );
 };
 
-const Projects = () => {
+const Events = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
@@ -186,7 +209,7 @@ const Projects = () => {
                 : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
             }`}
           >
-            Projects
+            Events
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -194,13 +217,13 @@ const Projects = () => {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground max-w-2xl mx-auto"
           >
-            Discover innovative projects, collaborate with others, and showcase your work
+            Discover and participate in exciting tech events, workshops, and networking opportunities
           </motion.p>
           
           <div className="relative max-w-xl mx-auto mt-6">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search projects..."
+              placeholder="Search events..."
               className={`pl-10 backdrop-blur-sm ${
                 darkMode ? "bg-slate-800/50" : "bg-background/50"
               }`}
@@ -217,9 +240,9 @@ const Projects = () => {
               darkMode ? "bg-slate-800/50" : "bg-background/50"
             }`}>
               <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="featured">Featured</TabsTrigger>
-              <TabsTrigger value="trending">Trending</TabsTrigger>
-              <TabsTrigger value="recent">Recent</TabsTrigger>
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="ongoing">Ongoing</TabsTrigger>
+              <TabsTrigger value="past">Past</TabsTrigger>
             </TabsList>
           </Tabs>
 
@@ -239,10 +262,10 @@ const Projects = () => {
           </div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+        {/* Events Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {mockEvents.map((event, index) => (
+            <EventCard key={event.id} event={event} index={index} />
           ))}
         </div>
 
@@ -258,4 +281,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Events; 

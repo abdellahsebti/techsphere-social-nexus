@@ -1,100 +1,156 @@
-
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Users, Code, Trophy, BookOpen } from "lucide-react";
-import { cardStyles, animations } from "@/lib/theme";
-import { cn } from "@/lib/utils";
 
-interface StatCardProps {
-  title: string;
-  value: string;
-  description: string;
-  icon: React.ReactNode;
-  color: string;
-  delay?: number;
-}
+const stats = [
+  { label: "Active Users", value: "10K+", icon: Users },
+  { label: "Projects Created", value: "5K+", icon: Code },
+  { label: "Challenges Won", value: "1K+", icon: Trophy },
+  { label: "Learning Resources", value: "500+", icon: BookOpen }
+];
 
-const StatCard: React.FC<StatCardProps> = ({ 
-  title, 
-  value, 
-  description, 
-  icon, 
-  color,
-  delay = 0 
-}) => (
-  <Card 
-    className={cn(
-      "border-0 overflow-hidden relative",
-      animations.fadeIn,
-      animations.slideUp
-    )}
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className={`absolute inset-0 opacity-5 ${color}`} />
-    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-      <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      <div className={`p-2 rounded-full ${color} shadow-glow`}>{icon}</div>
-    </CardHeader>
-    <CardContent>
-      <div className="text-3xl font-bold tracking-tight">{value}</div>
-      <p className="text-xs text-muted-foreground mt-1">{description}</p>
-    </CardContent>
-  </Card>
-);
+const StatsSection = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-const StatsSection: React.FC = () => {
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+
   return (
-    <section className="py-16 bg-muted/30 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tech-blue to-tech-purple opacity-30" />
-      <div className="absolute -top-[300px] -left-[300px] w-[600px] h-[600px] rounded-full bg-tech-blue/5 blur-3xl" />
-      <div className="absolute -bottom-[300px] -right-[300px] w-[600px] h-[600px] rounded-full bg-tech-purple/5 blur-3xl" />
-      
+    <motion.section 
+      ref={ref}
+      style={{ opacity, y, scale }}
+      className="py-20 bg-gradient-to-b from-background/50 to-background relative overflow-hidden"
+    >
+      {/* Animated background elements */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-tech-blue/5 via-tech-purple/5 to-tech-red/5"
+        animate={{
+          opacity: [0.5, 0.8, 0.5],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      <motion.div
+        className="absolute -top-40 -left-40 w-80 h-80 bg-tech-blue/10 rounded-full blur-3xl"
+        animate={{
+          x: [0, 50, 0],
+          y: [0, 30, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      <motion.div
+        className="absolute -bottom-40 -right-40 w-80 h-80 bg-tech-purple/10 rounded-full blur-3xl"
+        animate={{
+          x: [0, -50, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
       <div className="container px-4 md:px-6 relative">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold tracking-tight mb-2">Our Growing Community</h2>
-          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
-            Join thousands of students and educators in the TechSphere network to collaborate, 
-            learn, and showcase your technical skills.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Active Users"
-            value="12,500+"
-            description="Students and educators from top universities worldwide"
-            icon={<Users className="h-4 w-4 text-white" />}
-            color="bg-gradient-to-r from-blue-500 to-tech-blue"
-            delay={100}
-          />
-          <StatCard
-            title="Projects"
-            value="8,200+"
-            description="Innovative student projects across all technical domains"
-            icon={<Code className="h-4 w-4 text-white" />}
-            color="bg-gradient-to-r from-tech-purple to-purple-500"
-            delay={200}
-          />
-          <StatCard
-            title="Challenges Completed"
-            value="34,120+"
-            description="Technical challenges solved by our community members"
-            icon={<Trophy className="h-4 w-4 text-white" />}
-            color="bg-gradient-to-r from-amber-500 to-yellow-400"
-            delay={300}
-          />
-          <StatCard
-            title="Learning Resources"
-            value="5,340+"
-            description="Shared resources to help you master new skills faster"
-            icon={<BookOpen className="h-4 w-4 text-white" />}
-            color="bg-gradient-to-r from-green-500 to-teal-400"
-            delay={400}
-          />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <motion.h2 
+            className="text-3xl font-bold mb-4 bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Our Impact
+          </motion.h2>
+          <motion.p 
+            className="text-muted-foreground max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            Join thousands of tech enthusiasts who are learning, building, and growing together
+          </motion.p>
+        </motion.div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  delay: index * 0.1,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 10
+                }}
+                className="text-center group relative"
+                whileHover={{ y: -5 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-tech-blue/10 to-tech-purple/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={false}
+                />
+                <motion.div
+                  className="relative inline-block"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-tech-blue/20 to-tech-purple/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    initial={false}
+                  />
+                  <div className="relative p-4 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
+                    <Icon className="h-8 w-8 text-tech-blue" />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ scale: 0.5 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + 0.2 }}
+                  className="text-3xl font-bold mb-2 bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent"
+                >
+                  {stat.value}
+                </motion.div>
+                <motion.p 
+                  className="text-muted-foreground"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + 0.3 }}
+                >
+                  {stat.label}
+                </motion.p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
