@@ -16,6 +16,7 @@ import Roadmap from "./pages/Roadmap";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
+import About from "./pages/About";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
               <Route path="/roadmap" element={<Roadmap />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/messages" element={<Messages />} />
+              <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-social-images": "node scripts/generate-social-images.js"
+    "generate-social-images": "node scripts/generate-social-images.js",
+    "generate-developer-avatar": "node scripts/generate-developer-avatar.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

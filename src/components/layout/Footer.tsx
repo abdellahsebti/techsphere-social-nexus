@@ -95,6 +95,7 @@ const Footer = () => {
             <FooterLink to="/events">Events</FooterLink>
             <FooterLink to="/blog">Blog</FooterLink>
             <FooterLink to="/leaderboard">Leaderboard</FooterLink>
+            <FooterLink to="/about">About Us</FooterLink>
           </FooterSection>
 
           {/* Resources */}
