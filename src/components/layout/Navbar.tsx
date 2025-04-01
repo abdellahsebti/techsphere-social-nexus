@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,13 +22,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NotificationCenter } from "@/components/ui/notification-center";
 import { useAppContext } from "@/context/AppContext";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useAppContext();
 
   return (
     <nav className="sticky top-0 z-40 w-full backdrop-blur-sm bg-background/90 border-b">
-      <div className="container flex h-16 items-center justify-between py-4">
+      <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
             <span className="bg-gradient-to-r from-tech-blue to-tech-purple text-transparent bg-clip-text font-bold text-xl">
@@ -63,54 +63,78 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={toggleDarkMode}
-              className="text-muted-foreground hover:text-foreground"
+              className={`relative rounded-full ${
+                darkMode 
+                  ? "text-yellow-400 hover:text-yellow-300" 
+                  : "text-blue-600 hover:text-blue-500"
+              }`}
             >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {darkMode ? (
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Sun className="h-5 w-5" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Moon className="h-5 w-5" />
+                </motion.div>
+              )}
+              <span className="sr-only">Toggle dark mode</span>
             </Button>
-            
-            <NotificationCenter />
-            
-            <Button variant="ghost" size="icon">
-              <MessageSquare className="h-5 w-5" />
-            </Button>
-            
-            <Link to="/profile">
-              <Avatar className="h-8 w-8 border-2 border-tech-purple">
-                <AvatarImage src="https://github.com/shadcn.png" alt="Profile" />
-                <AvatarFallback>TS</AvatarFallback>
-              </Avatar>
-            </Link>
-          </div>
+          </motion.div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Navigation</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link to="/feed">Feed</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="/projects">Projects</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="/challenges">Challenges</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="/leaderboard">Leaderboard</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <NotificationCenter />
+          
+          <Button variant="ghost" size="icon">
+            <MessageSquare className="h-5 w-5" />
+          </Button>
+          
+          <Link to="/profile">
+            <Avatar className="h-8 w-8 border-2 border-tech-purple">
+              <AvatarImage src="https://github.com/shadcn.png" alt="Profile" />
+              <AvatarFallback>TS</AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Link to="/feed">Feed</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="/projects">Projects</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="/challenges">Challenges</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="/leaderboard">Leaderboard</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );

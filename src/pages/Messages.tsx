@@ -36,7 +36,7 @@ const conversations = [
       id: "u3",
       name: "Michael Zhang",
       avatar: "https://i.pravatar.cc/150?img=3",
-      school: "ENSBS",
+      school: "ENSCS",
       isOnline: true
     },
     lastMessage: {
@@ -53,7 +53,7 @@ const conversations = [
       id: "u4",
       name: "Emma Wilson",
       avatar: "https://i.pravatar.cc/150?img=10",
-      school: "ENSNN",
+      school: "ENSIA",
       isOnline: false
     },
     lastMessage: {
@@ -70,7 +70,7 @@ const conversations = [
       id: "u5",
       name: "David Kim",
       avatar: "https://i.pravatar.cc/150?img=7",
-      school: "ENSAI",
+      school: "ENSTSA",
       isOnline: false
     },
     lastMessage: {

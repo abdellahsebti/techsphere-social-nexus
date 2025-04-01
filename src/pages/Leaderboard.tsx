@@ -1,593 +1,660 @@
-
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUp, ArrowDown, Minus, Trophy, Star, Calendar, School, Award, Medal } from "lucide-react";
+import { 
+  Search, Trophy, Medal, Star, Award, Crown,
+  TrendingUp, School, Globe, Users, Zap, Target,
+  Sparkles, Flame, ChevronRight, ChevronLeft
+} from "lucide-react";
+import { useAppContext } from "@/context/AppContext";
 
-// Sample leaderboard data
-const weeklyLeaderboardData = [
+// Mock Data
+const mockUsers = [
   {
-    id: "u1",
-    rank: 1,
-    name: "Alex Chen",
-    username: "alexc",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    school: "ENSCS",
-    level: 28,
-    xp: 2840,
-    change: "up"
-  },
-  {
-    id: "u2",
-    rank: 2,
-    name: "Sarah Johnson",
-    username: "sarahj",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    school: "ENSNN",
-    level: 27,
-    xp: 2710,
-    change: "same"
-  },
-  {
-    id: "u3",
-    rank: 3,
-    name: "Michael Zhang",
-    username: "michaelz",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    school: "ENSBS",
-    level: 26,
-    xp: 2650,
-    change: "up"
-  },
-  {
-    id: "u4",
-    rank: 4,
-    name: "Emma Wilson",
-    username: "emmaw",
-    avatar: "https://i.pravatar.cc/150?img=10",
-    school: "ENSNN",
-    level: 25,
-    xp: 2530,
-    change: "down"
-  },
-  {
-    id: "u5",
-    rank: 5,
-    name: "David Kim",
-    username: "davidk",
-    avatar: "https://i.pravatar.cc/150?img=7",
-    school: "ENSAI",
-    level: 24,
-    xp: 2490,
-    change: "up"
-  },
-  {
-    id: "u6",
-    rank: 6,
-    name: "Sophia Lee",
-    username: "sophial",
-    avatar: "https://i.pravatar.cc/150?img=9",
-    school: "ENSCS",
-    level: 23,
-    xp: 2320,
-    change: "down"
-  },
-  {
-    id: "u7",
-    rank: 7,
-    name: "Aisha Patel",
-    username: "aishap",
-    avatar: "https://i.pravatar.cc/150?img=23",
-    school: "ENSNN",
-    level: 22,
-    xp: 2260,
-    change: "up"
-  },
-  {
-    id: "u8",
-    rank: 8,
-    name: "Carlos Mendez",
-    username: "carlosm",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    school: "ENSBS",
-    level: 21,
-    xp: 2140,
-    change: "up"
-  },
-  {
-    id: "u9",
-    rank: 9,
-    name: "Jin Lee",
-    username: "jinl",
-    avatar: "https://i.pravatar.cc/150?img=15",
-    school: "ENSAI",
-    level: 20,
-    xp: 2050,
-    change: "down"
-  },
-  {
-    id: "u10",
-    rank: 10,
-    name: "Zoe Chen",
-    username: "zoec",
-    avatar: "https://i.pravatar.cc/150?img=24",
-    school: "ENSCS",
-    level: 19,
-    xp: 1980,
-    change: "same"
-  }
-];
-
-const monthlyLeaderboardData = [
-  {
-    id: "u11",
-    rank: 1,
-    name: "Marcus Johnson",
-    username: "marcusj",
-    avatar: "https://i.pravatar.cc/150?img=31",
+    id: "user1",
+    name: "Dr. Emily Foster",
     school: "ENSQC",
-    level: 32,
-    xp: 6450,
-    change: "up",
-    achievements: ["Research Pioneer", "Collaboration Star"]
+    avatar: "https://i.pravatar.cc/150?u=emily",
+    badge: "Verified Researcher",
+    xp: 2500,
+    level: 15,
+    weeklyXP: 850,
+    streak: 12,
+    achievements: ["Quantum Pioneer", "ML Expert"]
   },
   {
-    id: "u12",
-    rank: 2,
-    name: "Leila Karim",
-    username: "leilak",
-    avatar: "https://i.pravatar.cc/150?img=32",
-    school: "ENSCS",
-    level: 30,
-    xp: 6120,
-    change: "up",
-    achievements: ["Code Maestro", "Mentor of the Month"]
-  },
-  {
-    id: "u3",
-    rank: 3,
-    name: "Michael Zhang",
-    username: "michaelz",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    school: "ENSBS",
-    level: 29,
-    xp: 5980,
-    change: "up",
-    achievements: ["Blockchain Visionary"]
-  },
-  {
-    id: "u1",
-    rank: 4,
+    id: "user2",
     name: "Alex Chen",
-    username: "alexc",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    school: "ENSCS",
-    level: 28,
-    xp: 5820,
-    change: "down",
-    achievements: ["Challenge Champion"]
+    school: "ENSAI",
+    avatar: "https://i.pravatar.cc/150?u=alex",
+    badge: "Rising Star",
+    xp: 2350,
+    level: 14,
+    weeklyXP: 780,
+    streak: 8,
+    achievements: ["AI Innovator", "Project Star"]
   },
   {
-    id: "u2",
-    rank: 5,
+    id: "user3",
     name: "Sarah Johnson",
-    username: "sarahj",
-    avatar: "https://i.pravatar.cc/150?img=5",
     school: "ENSNN",
-    level: 27,
-    xp: 5650,
-    change: "down",
-    achievements: ["Neural Network Ninja"]
+    avatar: "https://i.pravatar.cc/150?u=sarah",
+    badge: "Tech Leader",
+    xp: 2200,
+    level: 13,
+    weeklyXP: 720,
+    streak: 15,
+    achievements: ["Neural Network Expert", "Community Champion"]
+  },
+  {
+    id: "user4",
+    name: "Michael Zhang",
+    school: "ENSBS",
+    avatar: "https://i.pravatar.cc/150?u=michael",
+    badge: "Blockchain Expert",
+    xp: 2100,
+    level: 13,
+    weeklyXP: 680,
+    streak: 10,
+    achievements: ["Web3 Pioneer", "Smart Contract Master"]
+  },
+  {
+    id: "user5",
+    name: "Lisa Chen",
+    school: "ENSCS",
+    avatar: "https://i.pravatar.cc/150?u=lisa",
+    badge: "Code Master",
+    xp: 2000,
+    level: 12,
+    weeklyXP: 650,
+    streak: 7,
+    achievements: ["Algorithm Expert", "Open Source Contributor"]
   }
 ];
 
-// School leaderboard data
-const schoolLeaderboardData = [
+const mockAchievements = [
   {
-    id: "s1",
-    rank: 1,
-    name: "ENSCS - Computer Science",
-    students: 843,
-    totalXp: 458200,
-    avgLevel: 22,
-    topAchievement: "Hackathon Champions",
-    change: "up"
+    id: "ach1",
+    title: "Challenge Champion",
+    description: "Won AI Model Challenge",
+    icon: <Award className="h-6 w-6 text-yellow-400" />
   },
   {
-    id: "s2",
-    rank: 2,
-    name: "ENSNN - Neural Networks",
-    students: 612,
-    totalXp: 398500,
-    avgLevel: 21,
-    topAchievement: "AI Research Excellence",
-    change: "up"
+    id: "ach2",
+    title: "Top Contributor",
+    description: "500+ Helpful Votes",
+    icon: <Star className="h-6 w-6 text-tech-blue" />
   },
   {
-    id: "s3",
-    rank: 3,
-    name: "ENSBS - Blockchain Studies",
-    students: 487,
-    totalXp: 342800,
-    avgLevel: 20,
-    topAchievement: "Web3 Innovation Prize",
-    change: "same"
+    id: "ach3",
+    title: "Innovation Award",
+    description: "Breakthrough in Quantum Computing",
+    icon: <Sparkles className="h-6 w-6 text-tech-purple" />
   },
   {
-    id: "s4",
-    rank: 4,
-    name: "ENSAI - AR/VR Innovations",
-    students: 394,
-    totalXp: 298600,
-    avgLevel: 19,
-    topAchievement: "Immersive Learning Award",
-    change: "down"
-  },
-  {
-    id: "s5",
-    rank: 5,
-    name: "ENSQC - Quantum Computing",
-    students: 245,
-    totalXp: 254700,
-    avgLevel: 23,
-    topAchievement: "Quantum Algorithm Breakthrough",
-    change: "up"
+    id: "ach4",
+    title: "Community Leader",
+    description: "Organized 5+ Workshops",
+    icon: <Users className="h-6 w-6 text-tech-red" />
   }
 ];
 
-const Leaderboard = () => {
-  const [filter, setFilter] = useState("all");
+const mockSchoolRankings = [
+  {
+    name: "ENSNN",
+    points: 12500,
+    activeUsers: 450,
+    topAchievements: ["AI Challenge Champions", "Most Active Community"],
+    rank: 1
+  },
+  {
+    name: "ENSQC",
+    points: 11200,
+    activeUsers: 380,
+    topAchievements: ["Quantum Innovation Award"],
+    rank: 2
+  },
+  {
+    name: "ENSAI",
+    points: 9800,
+    activeUsers: 320,
+    topAchievements: ["Robotics Excellence"],
+    rank: 3
+  },
+  {
+    name: "ENSBS",
+    points: 9200,
+    activeUsers: 290,
+    topAchievements: ["Blockchain Innovation"],
+    rank: 4
+  },
+  {
+    name: "ENSCS",
+    points: 8900,
+    activeUsers: 310,
+    topAchievements: ["Algorithm Masters"],
+    rank: 5
+  }
+];
+
+const PodiumCard = ({ rank, user }) => {
+  const { darkMode } = useAppContext();
+  
+  const getRankStyles = (rank) => {
+    switch(rank) {
+      case 1:
+        return darkMode 
+          ? "bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 shadow-lg shadow-yellow-500/30 hover:shadow-yellow-500/50"
+          : "bg-gradient-to-br from-yellow-300 via-yellow-400 to-amber-500 shadow-lg shadow-yellow-400/50 hover:shadow-yellow-400/70";
+      case 2:
+        return darkMode
+          ? "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600 shadow-lg shadow-gray-500/30 hover:shadow-gray-500/50"
+          : "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500 shadow-lg shadow-gray-400/50 hover:shadow-gray-400/70";
+      case 3:
+        return darkMode
+          ? "bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900 shadow-lg shadow-amber-700/30 hover:shadow-amber-700/50"
+          : "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 shadow-lg shadow-amber-600/50 hover:shadow-amber-600/70";
+      default:
+        return darkMode
+          ? "bg-gradient-to-br from-slate-700 to-slate-900"
+          : "bg-gradient-to-br from-slate-600 to-slate-800";
+    }
+  };
+
+  const podiumAnimations = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.5,
+        type: "spring",
+        stiffness: 100
+      }
+    })
+  };
+
+  return (
+    <motion.div
+      custom={rank}
+      initial="hidden"
+      animate="visible"
+      variants={podiumAnimations}
+      className="transform transition-all duration-300 hover:scale-105 relative group"
+    >
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden rounded-lg">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"
+        />
+      </div>
+
+      <Card className={`relative overflow-hidden ${getRankStyles(rank)} backdrop-blur-sm`}>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        <CardContent className="relative pt-6">
+          {/* Animated Crown */}
+          <motion.div
+            animate={{ rotate: [0, 10, -10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute top-2 right-2"
+          >
+            <Sparkles className="h-6 w-6 text-white/80" />
+          </motion.div>
+
+          {/* Animated Trophy */}
+          <motion.div
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="mb-4"
+          >
+            <Crown className="h-12 w-12 mx-auto text-white drop-shadow-glow" />
+          </motion.div>
+
+          {/* Avatar with Rotating Border */}
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            className="relative mx-auto w-20 h-20 mb-4"
+          >
+            <Avatar className="w-full h-full ring-4 ring-white/50">
+              <AvatarImage src={user.avatar} className="object-cover" />
+              <AvatarFallback className="bg-tech-purple/20 text-white">
+                {user.name[0]}
+              </AvatarFallback>
+            </Avatar>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border-2 border-dashed border-white/30"
+            />
+            {/* Pulsing ring effect */}
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.5, 0.8, 0.5]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 rounded-full border-2 border-white/50"
+            />
+          </motion.div>
+
+          {/* User Info */}
+          <div className="space-y-2 text-center">
+            <motion.h3 
+              whileHover={{ scale: 1.05 }}
+              className="text-xl font-bold text-white text-shadow-sm"
+            >
+              {user.name}
+            </motion.h3>
+            <p className="text-white/80">{user.school}</p>
+            
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              className="inline-block"
+            >
+              <Badge className="bg-white/20 text-white border-none backdrop-blur-sm">
+                Level {user.level}
+              </Badge>
+            </motion.div>
+
+            {/* XP Display with floating animation */}
+            <motion.div
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="mt-4"
+            >
+              <span className="text-3xl font-bold text-white drop-shadow-glow">
+                {user.weeklyXP}
+              </span>
+              <span className="text-white/80 ml-1">XP</span>
+            </motion.div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
+const LeaderboardRow = ({ user, rank, index }) => {
+  const { darkMode } = useAppContext();
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      whileHover={{ scale: 1.02 }}
+      className={`group relative overflow-hidden rounded-lg ${
+        darkMode 
+          ? "bg-gradient-to-r from-slate-800/50 to-slate-900/50 hover:from-tech-blue/10 hover:to-tech-purple/10"
+          : "bg-gradient-to-r from-background to-background/80 hover:from-tech-blue/5 hover:to-tech-purple/5"
+      } p-4 transition-all duration-300`}
+    >
+      {/* Enhanced shimmer effect */}
+      <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${
+        darkMode ? "via-white/10" : "via-white/5"
+      } to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000`} />
+      
+      <div className="relative flex items-center justify-between">
+        {/* Rank and Avatar Section */}
+        <div className="flex items-center gap-4">
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: 10 }}
+            className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-tech-blue to-tech-purple min-w-[2.5rem]`}
+          >
+            #{rank}
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            className="relative"
+          >
+            <Avatar className="h-12 w-12 ring-2 ring-tech-purple/30 transition-shadow duration-300 group-hover:ring-tech-purple/50">
+              <AvatarImage src={user.avatar} />
+              <AvatarFallback className="bg-tech-purple/20">
+                {user.name[0]}
+              </AvatarFallback>
+            </Avatar>
+            {/* Pulsing ring effect */}
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 rounded-full border-2 border-tech-purple/30"
+            />
+          </motion.div>
+
+          {/* User Info */}
+          <div>
+            <div className="font-medium group-hover:text-tech-blue transition-colors duration-300">
+              {user.name}
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <School className="h-4 w-4" />
+              {user.school}
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="flex items-center gap-4">
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            className="flex items-center gap-2"
+          >
+            <Badge className="bg-tech-purple/20 text-tech-purple border-none backdrop-blur-sm">
+              <Zap className="h-4 w-4 mr-1" />
+              Level {user.level}
+            </Badge>
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            className="flex items-center gap-2"
+          >
+            <Flame className="h-5 w-5 text-tech-red" />
+            <span className="text-xl font-bold bg-gradient-to-r from-tech-red to-tech-purple bg-clip-text text-transparent">
+              {user.weeklyXP} XP
+            </span>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const AchievementCard = ({ achievement, delay }) => {
+  const { darkMode } = useAppContext();
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      whileHover={{ scale: 1.05 }}
+      className={`group relative overflow-hidden rounded-lg ${
+        darkMode
+          ? "bg-gradient-to-r from-tech-blue/10 via-tech-purple/10 to-tech-red/10"
+          : "bg-gradient-to-r from-tech-blue/5 via-tech-purple/5 to-tech-red/5"
+      } p-4 transition-all duration-300`}
+    >
+      {/* Enhanced shimmer effect */}
+      <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${
+        darkMode ? "via-white/10" : "via-white/5"
+      } to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000`} />
+      
+      <div className="relative flex items-center gap-3">
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="p-2 rounded-full bg-gradient-to-br from-tech-blue/10 to-tech-purple/10 backdrop-blur-sm"
+        >
+          {achievement.icon}
+        </motion.div>
+        
+        <div>
+          <div className="font-medium bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent">
+            {achievement.title}
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {achievement.description}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const Leaderboard = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("individual");
+  const { darkMode } = useAppContext();
+  
+  return (
+    <div className={`min-h-screen flex flex-col ${
+      darkMode 
+        ? "bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950"
+        : "bg-gradient-to-b from-background via-background/95 to-background"
+    }`}>
       <Navbar />
       
       <main className="flex-grow py-6">
-        <div className="container px-4 md:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="container px-4 md:px-6"
+        >
+          {/* Header Section */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold mb-2">Leaderboards</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Recognize achievements, track progress, and compete for the top spots across the TechSphere community.
-            </p>
+            <motion.h1 
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className={`text-5xl font-bold mb-2 ${
+                darkMode
+                  ? "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
+                  : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
+              }`}
+            >
+              Leaderboard
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground max-w-2xl mx-auto"
+            >
+              Discover top performers, track your progress, and compete for recognition
+            </motion.p>
+            
+            <div className="relative max-w-xl mx-auto mt-6">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search users or schools..."
+                className={`pl-10 backdrop-blur-sm ${
+                  darkMode ? "bg-slate-800/50" : "bg-background/50"
+                }`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
           
-          <Tabs defaultValue="weekly" className="mb-8">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-              <TabsList className="mb-4 sm:mb-0">
-                <TabsTrigger value="weekly">Weekly</TabsTrigger>
-                <TabsTrigger value="monthly">Monthly</TabsTrigger>
-                <TabsTrigger value="alltime">All-Time</TabsTrigger>
-                <TabsTrigger value="schools">Schools</TabsTrigger>
-              </TabsList>
-              
-              <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="w-36">
-                  <SelectValue placeholder="Filter by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Schools</SelectItem>
-                  <SelectItem value="enscs">ENSCS</SelectItem>
-                  <SelectItem value="ensnn">ENSNN</SelectItem>
-                  <SelectItem value="ensbs">ENSBS</SelectItem>
-                  <SelectItem value="ensai">ENSAI</SelectItem>
-                  <SelectItem value="ensqc">ENSQC</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <Tabs defaultValue="individual" className="mb-8" onValueChange={setActiveTab}>
+            <TabsList className={`grid w-full grid-cols-3 max-w-md mx-auto backdrop-blur-sm ${
+              darkMode ? "bg-slate-800/50" : "bg-background/50"
+            }`}>
+              <TabsTrigger value="individual">Individual</TabsTrigger>
+              <TabsTrigger value="school">School</TabsTrigger>
+              <TabsTrigger value="challenges">Challenges</TabsTrigger>
+            </TabsList>
             
-            <TabsContent value="weekly">
-              <div className="space-y-4">
-                {/* Top 3 Spotlight */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <TopUserCard user={weeklyLeaderboardData[1]} position="second" />
-                  <TopUserCard user={weeklyLeaderboardData[0]} position="first" />
-                  <TopUserCard user={weeklyLeaderboardData[2]} position="third" />
-                </div>
-                
-                {/* Full Leaderboard */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Weekly Top 10</CardTitle>
-                    <CardDescription>Updated daily at midnight</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {weeklyLeaderboardData.map(user => (
-                        <LeaderboardRow key={user.id} user={user} />
-                      ))}
+            <AnimatePresence mode="wait">
+              <TabsContent value="individual" className="mt-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+                >
+                  <div className="lg:col-span-2 space-y-6">
+                    {/* Top 3 Podium */}
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                      <div className="order-1 pt-8">
+                        <PodiumCard rank={2} user={mockUsers[1]} />
+                      </div>
+                      <div className="order-2">
+                        <PodiumCard rank={1} user={mockUsers[0]} />
+                      </div>
+                      <div className="order-3 pt-16">
+                        <PodiumCard rank={3} user={mockUsers[2]} />
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="monthly">
-              <div className="space-y-4">
-                {/* Monthly Leaders spotlight with achievements */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                  {monthlyLeaderboardData.slice(0, 3).map((user, index) => (
-                    <Card key={user.id} className={`tech-hover-card overflow-hidden border-2 ${index === 0 ? 'border-tech-blue bg-tech-blue/5' : 'border-muted'}`}>
-                      <CardHeader className="pb-2">
-                        <div className="flex justify-between items-start">
-                          <Badge className={`${index === 0 ? 'bg-tech-blue' : index === 1 ? 'bg-tech-purple' : 'bg-tech-orange'}`}>
-                            <Trophy className="h-3 w-3 mr-1" />
-                            Rank #{user.rank}
-                          </Badge>
-                          <RankChange change={user.change} />
-                        </div>
+
+                    {/* Leaderboard List */}
+                    <Card className={`backdrop-blur-sm ${
+                      darkMode ? "bg-slate-800/50" : "bg-background/50"
+                    }`}>
+                      <CardHeader>
+                        <CardTitle>Weekly Rankings</CardTitle>
+                        <CardDescription>Updated in real-time</CardDescription>
                       </CardHeader>
-                      <CardContent className="text-center pt-0">
-                        <Avatar className={`h-24 w-24 mx-auto mb-4 border-4 ${index === 0 ? 'border-tech-blue' : 'border-muted'}`}>
-                          <AvatarImage src={user.avatar} />
-                          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        
-                        <h3 className="font-bold text-xl mb-1">{user.name}</h3>
-                        <p className="text-muted-foreground mb-2">@{user.username}</p>
-                        
-                        <div className="flex items-center justify-center mb-3">
-                          <Badge variant="outline" className="mr-2">
-                            <School className="h-3 w-3 mr-1" />
-                            {user.school}
-                          </Badge>
-                          <Badge variant="outline">
-                            <Star className="h-3 w-3 mr-1" />
-                            Level {user.level}
-                          </Badge>
-                        </div>
-                        
-                        <div className="mb-4">
-                          <p className="text-sm text-muted-foreground mb-1">XP: {user.xp}</p>
-                          <Progress value={75} className="h-2" />
-                        </div>
-                        
-                        <div className="space-y-2 mb-4">
-                          {user.achievements?.map(achievement => (
-                            <Badge key={achievement} variant="outline" className="w-full justify-center py-1">
-                              <Award className="h-3 w-3 mr-1" />
-                              {achievement}
-                            </Badge>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {mockUsers.slice(3).map((user, index) => (
+                            <LeaderboardRow key={user.id} user={user} rank={index + 4} index={index} />
                           ))}
                         </div>
-                        
-                        <Button variant="outline" size="sm" className="w-full">View Profile</Button>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-                
-                {/* Rest of monthly leaderboard */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Monthly Leaderboard</CardTitle>
-                    <CardDescription>Top performers for November 2023</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {monthlyLeaderboardData.map(user => (
-                        <LeaderboardRow key={user.id} user={user} />
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="alltime">
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>All-Time Leaderboard</CardTitle>
-                  <CardDescription>Coming Soon</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center py-12">
-                  <Trophy className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-bold mb-2">All-Time Leaderboard Coming Soon</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto">
-                    We're compiling the achievements and contributions of all users to create a comprehensive all-time leaderboard.
-                  </p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="schools">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-xl">School Rankings</CardTitle>
-                  <CardDescription>Based on collective XP and achievements</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {schoolLeaderboardData.map(school => (
-                      <div key={school.id} className="flex items-center p-3 rounded-lg border hover:bg-muted/50 transition-colors">
-                        <div className="flex-shrink-0 w-8 text-center font-bold">
-                          {school.rank}
+                  </div>
+                  
+                  <div className="space-y-6">
+                    {/* Your Ranking */}
+                    <Card className={`backdrop-blur-sm ${
+                      darkMode ? "bg-slate-800/50" : "bg-background/50"
+                    }`}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Target className="h-5 w-5 mr-2" />
+                          Your Ranking
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center mb-4">
+                          <div className="text-3xl font-bold">#28</div>
+                          <div className="text-sm text-muted-foreground">Top 5%</div>
                         </div>
-                        <div className="flex-shrink-0 ml-2">
-                          <RankChange change={school.change} />
-                        </div>
-                        <div className="ml-4 flex-grow">
-                          <h3 className="font-medium">{school.name}</h3>
-                          <div className="flex flex-wrap text-xs text-muted-foreground mt-1">
-                            <span className="inline-flex items-center mr-4">
-                              <Users className="h-3 w-3 mr-1" />
-                              {school.students} students
-                            </span>
-                            <span className="inline-flex items-center mr-4">
-                              <Star className="h-3 w-3 mr-1" />
-                              Avg Level: {school.avgLevel}
-                            </span>
-                            <span className="inline-flex items-center">
-                              <Trophy className="h-3 w-3 mr-1" />
-                              {school.topAchievement}
-                            </span>
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center">
+                            <span>Weekly XP</span>
+                            <Badge variant="secondary" className={`backdrop-blur-sm ${
+                              darkMode ? "bg-slate-700/50" : "bg-background/50"
+                            }`}>450 XP</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Active Streak</span>
+                            <Badge variant="secondary" className={`backdrop-blur-sm ${
+                              darkMode ? "bg-slate-700/50" : "bg-background/50"
+                            }`}>7 days</Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Best Ranking</span>
+                            <Badge variant="secondary" className={`backdrop-blur-sm ${
+                              darkMode ? "bg-slate-700/50" : "bg-background/50"
+                            }`}>#15</Badge>
                           </div>
                         </div>
-                        <div className="flex-shrink-0 ml-4 text-right">
-                          <div className="font-semibold">{(school.totalXp / 1000).toFixed(1)}K XP</div>
-                          <Button variant="ghost" size="sm" className="mt-1">
-                            View Details
-                          </Button>
+                      </CardContent>
+                    </Card>
+
+                    {/* Achievement Showcase */}
+                    <Card className={`backdrop-blur-sm ${
+                      darkMode ? "bg-slate-800/50" : "bg-background/50"
+                    }`}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Medal className="h-5 w-5 mr-2" />
+                          Recent Achievements
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {mockAchievements.map((achievement, index) => (
+                            <AchievementCard 
+                              key={achievement.id} 
+                              achievement={achievement} 
+                              delay={index * 0.1} 
+                            />
+                          ))}
                         </div>
-                      </div>
-                    ))}
+                      </CardContent>
+                    </Card>
+
+                    {/* School Rankings */}
+                    <Card className={`backdrop-blur-sm ${
+                      darkMode ? "bg-slate-800/50" : "bg-background/50"
+                    }`}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <School className="h-5 w-5 mr-2" />
+                          School Rankings
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {mockSchoolRankings.map((school, index) => (
+                            <motion.div
+                              key={school.name}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className={`flex items-center justify-between p-3 rounded-lg ${
+                                darkMode
+                                  ? "bg-gradient-to-r from-tech-blue/10 to-tech-purple/10 hover:from-tech-blue/20 hover:to-tech-purple/20"
+                                  : "bg-gradient-to-r from-tech-blue/5 to-tech-purple/5 hover:from-tech-blue/10 hover:to-tech-purple/10"
+                              } transition-all duration-300`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="text-2xl font-bold text-muted-foreground">
+                                  #{school.rank}
+                                </div>
+                                <div>
+                                  <div className="font-medium">{school.name}</div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {school.activeUsers} active users
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="font-bold text-tech-purple">
+                                  {school.points} pts
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {school.topAchievements[0]}
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                </motion.div>
+              </TabsContent>
+            </AnimatePresence>
           </Tabs>
-        </div>
+        </motion.div>
       </main>
       
       <Footer />
     </div>
-  );
-};
-
-const TopUserCard = ({ user, position }) => {
-  const getStyles = () => {
-    switch (position) {
-      case 'first':
-        return {
-          containerClass: 'order-2 md:order-2 transform md:scale-110 border-tech-blue bg-tech-blue/5 z-10',
-          avatarSize: 'h-24 w-24',
-          badgeColor: 'bg-tech-blue'
-        };
-      case 'second':
-        return {
-          containerClass: 'order-1 md:order-1 border-tech-purple bg-tech-purple/5',
-          avatarSize: 'h-20 w-20',
-          badgeColor: 'bg-tech-purple'
-        };
-      case 'third':
-        return {
-          containerClass: 'order-3 md:order-3 border-tech-orange bg-tech-orange/5',
-          avatarSize: 'h-20 w-20',
-          badgeColor: 'bg-tech-orange'
-        };
-      default:
-        return {
-          containerClass: '',
-          avatarSize: 'h-20 w-20',
-          badgeColor: 'bg-primary'
-        };
-    }
-  };
-  
-  const styles = getStyles();
-  
-  return (
-    <Card className={`text-center tech-hover-card ${styles.containerClass} border-2`}>
-      <CardHeader className="pb-0 pt-4">
-        <Badge className={`${styles.badgeColor} mx-auto`}>
-          <Trophy className="h-3 w-3 mr-1" />
-          {position === 'first' ? '1st Place' : position === 'second' ? '2nd Place' : '3rd Place'}
-        </Badge>
-      </CardHeader>
-      <CardContent>
-        <Avatar className={`${styles.avatarSize} mx-auto my-4`}>
-          <AvatarImage src={user.avatar} />
-          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-        </Avatar>
-        
-        <h3 className="font-bold text-lg mb-1">{user.name}</h3>
-        <div className="flex items-center justify-center space-x-2 mb-3">
-          <Badge variant="outline">
-            <School className="h-3 w-3 mr-1" />
-            {user.school}
-          </Badge>
-          <Badge variant="outline">
-            <Star className="h-3 w-3 mr-1" />
-            Level {user.level}
-          </Badge>
-        </div>
-        
-        <div className="flex items-center justify-center">
-          <Medal className={`h-5 w-5 mr-2 ${position === 'first' ? 'text-yellow-500' : position === 'second' ? 'text-gray-400' : 'text-amber-700'}`} />
-          <span className="font-bold">{user.xp} XP</span>
-        </div>
-        
-        <Button variant="outline" size="sm" className="mt-4 w-full">View Profile</Button>
-      </CardContent>
-    </Card>
-  );
-};
-
-const LeaderboardRow = ({ user }) => {
-  return (
-    <div className="flex items-center p-3 rounded-lg hover:bg-muted/50 transition-colors">
-      <div className="flex-shrink-0 w-8 text-center font-bold">
-        {user.rank}
-      </div>
-      <div className="flex-shrink-0 ml-2">
-        <RankChange change={user.change} />
-      </div>
-      <div className="flex-shrink-0 ml-4">
-        <Avatar>
-          <AvatarImage src={user.avatar} />
-          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-        </Avatar>
-      </div>
-      <div className="ml-4 flex-grow">
-        <div className="font-medium">{user.name}</div>
-        <div className="text-sm text-muted-foreground flex items-center">
-          <span>@{user.username}</span>
-          <span className="mx-2">•</span>
-          <Badge variant="outline" className="text-xs">
-            <School className="h-3 w-3 mr-1" />
-            {user.school}
-          </Badge>
-        </div>
-      </div>
-      <div className="flex-shrink-0 text-center mr-4">
-        <div className="font-semibold">Level {user.level}</div>
-        <div className="text-xs text-muted-foreground">
-          <Star className="h-3 w-3 inline mr-1" />
-          {user.xp} XP
-        </div>
-      </div>
-      <div className="flex-shrink-0">
-        <Button variant="ghost" size="sm">
-          View
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-const RankChange = ({ change }) => {
-  if (change === 'up') {
-    return <ArrowUp className="h-4 w-4 text-tech-green" />;
-  } else if (change === 'down') {
-    return <ArrowDown className="h-4 w-4 text-tech-red" />;
-  } else {
-    return <Minus className="h-4 w-4 text-muted-foreground" />;
-  }
-};
-
-const Users = ({ className }) => {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-      <circle cx="9" cy="7" r="4"></circle>
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-    </svg>
   );
 };
 
