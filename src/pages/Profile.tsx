@@ -273,7 +273,7 @@ export default function Profile() {
                   <Avatar className="h-36 w-36 border-4 border-background shadow-xl ring-2 ring-primary/20">
                     <AvatarImage src={userProfile.avatar} className="object-cover" />
                     <AvatarFallback>{userProfile.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
+                </Avatar>
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -321,9 +321,9 @@ export default function Profile() {
                 <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
                   <UserPlus className="h-4 w-4 mr-2" />
                   Follow
-                </Button>
-              </div>
+              </Button>
             </div>
+          </div>
           </motion.div>
 
           {/* Profile Content */}
@@ -358,7 +358,7 @@ export default function Profile() {
                 </TabsList>
 
                 <AnimatePresence mode="wait">
-                  <TabsContent value="overview" className="space-y-6">
+                <TabsContent value="overview" className="space-y-6">
                     <motion.div
                       key="overview"
                       variants={fadeInUp}
@@ -444,9 +444,9 @@ export default function Profile() {
                         </Card>
                       </motion.div>
                     </motion.div>
-                  </TabsContent>
+                </TabsContent>
 
-                  <TabsContent value="projects" className="space-y-6">
+                <TabsContent value="projects" className="space-y-6">
                     <motion.div
                       key="projects"
                       variants={fadeInUp}
@@ -484,9 +484,9 @@ export default function Profile() {
                         ))}
                       </div>
                     </motion.div>
-                  </TabsContent>
+                </TabsContent>
 
-                  <TabsContent value="skills" className="space-y-6">
+                <TabsContent value="skills" className="space-y-6">
                     <motion.div
                       key="skills"
                       variants={fadeInUp}
@@ -608,15 +608,15 @@ export default function Profile() {
                         ))}
                       </div>
                     </motion.div>
-                  </TabsContent>
+                </TabsContent>
 
-                  <TabsContent value="activity" className="space-y-6">
-                    {/* Activity content */}
-                  </TabsContent>
+                <TabsContent value="activity" className="space-y-6">
+                  {/* Activity content */}
+                </TabsContent>
 
-                  <TabsContent value="settings" className="space-y-6">
-                    {/* Settings content */}
-                  </TabsContent>
+                <TabsContent value="settings" className="space-y-6">
+                  {/* Settings content */}
+                </TabsContent>
                 </AnimatePresence>
               </Tabs>
             </motion.div>
@@ -631,79 +631,79 @@ export default function Profile() {
               {/* Profile Info Card */}
               <motion.div variants={scaleIn}>
                 <Card className="bg-background/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle>Profile Info</CardTitle>
+                <CardHeader>
+                  <CardTitle>Profile Info</CardTitle>
                     <CardDescription>Your personal information and preferences</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                </CardHeader>
+                <CardContent className="space-y-4">
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <MapPin className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         <span>{userProfile.location}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                    </div>
+                  </div>
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <Briefcase className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         <span>{userProfile.position}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                    </div>
+                  </div>
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <GraduationCap className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         <span>{userProfile.school}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </CardContent>
+              </Card>
               </motion.div>
 
               {/* Social Links Card */}
               <motion.div variants={scaleIn}>
                 <Card className="bg-background/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle>Social Links</CardTitle>
+                <CardHeader>
+                  <CardTitle>Social Links</CardTitle>
                     <CardDescription>Connect your social media accounts</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                </CardHeader>
+                <CardContent className="space-y-4">
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <Github className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                        <span>GitHub</span>
-                      </div>
+                    <span>GitHub</span>
+                  </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
                     </div>
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <Twitter className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                        <span>Twitter</span>
-                      </div>
+                    <span>Twitter</span>
+                  </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
                     </div>
                     <div className="flex items-center justify-between group">
-                      <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                         <Linkedin className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                        <span>LinkedIn</span>
+                    <span>LinkedIn</span>
                       </div>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </CardContent>
+              </Card>
               </motion.div>
 
               {/* Achievements Card */}
@@ -716,7 +716,7 @@ export default function Profile() {
                   <CardContent>
                     <div className="grid grid-cols-2 gap-4">
                       {/* Add achievement badges here */}
-                    </div>
+            </div>
                   </CardContent>
                 </Card>
               </motion.div>
