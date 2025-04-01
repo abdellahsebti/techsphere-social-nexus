@@ -100,17 +100,14 @@ const About = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <picture>
-                    <source srcSet="/abdellah.webp" type="image/webp" />
-                    <img
-                      src="/abdellah.jpg"
-                      alt="Sebti Abdellah"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      width="400"
-                      height="400"
-                    />
-                  </picture>
+                  <img
+                    src="/abdellah.jpg"
+                    alt="Sebti Abdellah"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    width="400"
+                    height="400"
+                  />
                 </motion.div>
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent">
