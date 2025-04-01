@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAppContext } from "@/context/AppContext";
 import {
   Search,
   Bell,
@@ -20,13 +21,16 @@ import {
   Zap,
   Target,
   Flame,
-  User
+  User,
+  Moon,
+  Sun
 } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
+  const { darkMode, toggleDarkMode } = useAppContext();
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
@@ -140,6 +144,18 @@ const Navbar = () => {
                   3
                 </span>
               </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleDarkMode}
+                className="relative"
+              >
+                {darkMode ? (
+                  <Sun className="w-5 h-5 text-tech-yellow" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </Button>
               <Link to="/profile">
                 <Avatar className="h-8 w-8 border border-border/50 hover:border-tech-blue transition-colors cursor-pointer">
                   <AvatarImage src="https://github.com/shadcn.png" />
@@ -193,6 +209,22 @@ const Navbar = () => {
                 className="w-full"
               />
             </div>
+            <button
+              onClick={toggleDarkMode}
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-muted-foreground hover:bg-muted w-full"
+            >
+              {darkMode ? (
+                <>
+                  <Sun className="w-5 h-5 text-tech-yellow" />
+                  <span>Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-5 h-5" />
+                  <span>Dark Mode</span>
+                </>
+              )}
+            </button>
           </div>
         </motion.div>
       </div>
