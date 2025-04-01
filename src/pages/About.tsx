@@ -9,7 +9,7 @@ const About = () => {
     {
       name: "Instagram",
       icon: Instagram,
-      url: "https://instagram.com/abdellah_sebti",
+      url: "https://instagram.com/abdellah.sebtii",
       color: "text-pink-500 hover:text-pink-600",
       bgColor: "hover:bg-pink-500/10",
     },
