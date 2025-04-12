@@ -152,12 +152,25 @@ const Roadmap = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto mb-12"
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
           >
-            <h1 className="text-4xl font-bold mb-4">Platform Roadmap</h1>
-            <p className="text-muted-foreground">
-              Our journey to building the ultimate developer community platform. Here's what we've accomplished and what's coming next.
-            </p>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-4xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent mb-4"
+            >
+              Roadmap
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            >
+              Explore our development roadmap and upcoming features.
+            </motion.p>
           </motion.div>
 
           <div className="grid gap-6">

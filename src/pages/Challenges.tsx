@@ -197,96 +197,86 @@ const Challenges = () => {
   const { darkMode } = useAppContext();
   
   return (
-    <div className={`min-h-screen flex flex-col ${
-      darkMode 
-        ? "bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950"
-        : "bg-gradient-to-b from-background via-background/95 to-background"
-    }`}>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="container px-4 md:px-6"
-      >
-        {/* Header Section */}
-          <div className="text-center mb-10">
-          <motion.h1 
-            initial={{ scale: 0.5 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200 }}
-            className={`text-5xl font-bold mb-2 ${
-              darkMode
-                ? "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-                : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-            }`}
-          >
-            Challenges
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-muted-foreground max-w-2xl mx-auto"
-          >
-            Participate in exciting challenges, showcase your skills, and win rewards
-          </motion.p>
-            
-            <div className="relative max-w-xl mx-auto mt-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search challenges..."
-              className={`pl-10 backdrop-blur-sm ${
-                darkMode ? "bg-slate-800/50" : "bg-background/50"
-              }`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          
-        {/* Filters and Tabs */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
-            <TabsList className={`grid w-full grid-cols-4 max-w-md mx-auto backdrop-blur-sm ${
-              darkMode ? "bg-slate-800/50" : "bg-background/50"
-            }`}>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-              <TabsTrigger value="completed">Completed</TabsTrigger>
-            </TabsList>
-          </Tabs>
+    <div className="container py-8">
+      {/* Header Section */}
+      <div className="text-center mb-10">
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-4xl font-bold bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent mb-4"
+        >
+          Challenges
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-lg text-muted-foreground max-w-2xl mx-auto"
+        >
+          Participate in exciting challenges, showcase your skills, and win rewards
+        </motion.p>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="relative max-w-xl mx-auto mt-6"
+        >
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search challenges..."
+            className="pl-10 backdrop-blur-sm bg-card/50"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </motion.div>
+      </div>
+      
+      {/* Filters and Tabs */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+        <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4 max-w-md mx-auto backdrop-blur-sm bg-card/50">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="active">Active</TabsTrigger>
+            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filter
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              {sortBy === "recent" ? (
-                <SortDesc className="h-4 w-4" />
-              ) : (
-                <SortAsc className="h-4 w-4" />
-              )}
-              Sort
-            </Button>
-          </div>
-        </div>
-
-        {/* Challenges Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {mockChallenges.map((challenge, index) => (
-            <ChallengeCard key={challenge.id} challenge={challenge} index={index} />
-            ))}
-          </div>
-          
-        {/* Load More Button */}
-        <div className="text-center mt-8">
-          <Button variant="outline" className="gap-2">
-            Load More
-            <ChevronRight className="h-4 w-4" />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-2">
+            <Filter className="h-4 w-4" />
+            Filter
+          </Button>
+          <Button variant="outline" size="sm" className="gap-2">
+            {sortBy === "recent" ? (
+              <SortDesc className="h-4 w-4" />
+            ) : (
+              <SortAsc className="h-4 w-4" />
+            )}
+            Sort
           </Button>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Challenges Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {mockChallenges.map((challenge, index) => (
+          <ChallengeCard key={challenge.id} challenge={challenge} index={index} />
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      <div className="text-center mt-8">
+        <Button
+          variant="outline"
+          className="gap-2"
+        >
+          Load More
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 };

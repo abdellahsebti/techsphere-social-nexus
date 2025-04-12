@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -11,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/projects/ProjectCard";
 import SkillBadge from "@/components/profile/SkillBadge";
 import { Search, Compass, Zap, Users, Lightbulb, BookOpen, Briefcase, ArrowRight, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Sample discover data
 const trendingProjects = [
@@ -121,6 +121,16 @@ const Discover = () => {
       
       <main className="flex-grow py-6">
         <div className="container px-4 md:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
           <div className="text-center mb-10">
             <h1 className="text-4xl font-bold mb-2">Discover</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">

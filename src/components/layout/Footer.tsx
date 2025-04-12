@@ -39,6 +39,7 @@ const FooterSection = ({ title, children }) => {
 
 const Footer = () => {
   const { darkMode } = useAppContext();
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className={`border-t ${
@@ -140,7 +141,7 @@ const Footer = () => {
         }`}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © 2024 TechSphere. All rights reserved.
+              © {currentYear} TechSphere. All rights reserved.
             </p>
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <Globe className="h-4 w-4" />

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -9,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Lightbulb } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Sample data for ideas
 const ideasData = [
@@ -134,6 +134,30 @@ const Ideas = () => {
               New Idea
             </Button>
           </div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-4xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent mb-4"
+            >
+              Ideas
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            >
+              Share and explore innovative ideas from the community.
+            </motion.p>
+          </motion.div>
           
           <div className="tech-card p-6 mb-6 text-center">
             <h2 className="text-2xl font-bold mb-2">Where Innovation Begins</h2>

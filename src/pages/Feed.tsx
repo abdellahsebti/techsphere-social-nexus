@@ -202,39 +202,40 @@ const Feed = () => {
           className="container px-4 md:px-6"
         >
           {/* Header Section */}
-          <div className="text-center mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
             <motion.h1 
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className={`text-5xl font-bold mb-2 ${
-                darkMode
-                  ? "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-                  : "bg-gradient-to-r from-tech-blue via-tech-purple to-tech-red bg-clip-text text-transparent"
-              }`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-4xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent mb-4"
             >
               Feed
             </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-muted-foreground max-w-2xl mx-auto"
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             >
-              Discover and engage with the latest projects, ideas, and achievements from our community
+              Stay updated with the latest activities from your network.
             </motion.p>
-            
-            <div className="relative max-w-xl mx-auto mt-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search posts..."
-                className={`pl-10 backdrop-blur-sm ${
-                  darkMode ? "bg-slate-800/50" : "bg-background/50"
-                }`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          </motion.div>
+
+          <div className="relative max-w-xl mx-auto mt-6">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search posts..."
+              className={`pl-10 backdrop-blur-sm ${
+                darkMode ? "bg-slate-800/50" : "bg-background/50"
+              }`}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
           {/* Filters and Tabs */}

@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppContext } from "@/context/AppContext";
+import NotificationsPopover from "@/components/notifications/NotificationsPopover";
 import {
   Search,
-  Bell,
   Menu,
   X,
   Home,
@@ -23,7 +23,9 @@ import {
   Flame,
   User,
   Moon,
-  Sun
+  Sun,
+  LogIn,
+  UserPlus
 } from "lucide-react";
 
 const Navbar = () => {
@@ -31,6 +33,7 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const { darkMode, toggleDarkMode } = useAppContext();
+  const isAuthenticated = false; // This should come from your auth context
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
@@ -138,12 +141,7 @@ const Navbar = () => {
                   </motion.div>
                 )}
               </Button>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-tech-red rounded-full text-[10px] text-white flex items-center justify-center">
-                  3
-                </span>
-              </Button>
+              <NotificationsPopover />
               <Button
                 variant="ghost"
                 size="icon"
@@ -156,12 +154,29 @@ const Navbar = () => {
                   <Moon className="w-5 h-5" />
                 )}
               </Button>
-              <Link to="/profile">
-                <Avatar className="h-8 w-8 border border-border/50 hover:border-tech-blue transition-colors cursor-pointer">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </Link>
+              {isAuthenticated ? (
+                <Link to="/profile">
+                  <Avatar className="h-8 w-8 border border-border/50 hover:border-tech-blue transition-colors cursor-pointer">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </Link>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Link to="/login">
+                    <Button variant="ghost" size="sm" className="gap-2">
+                      <LogIn className="h-4 w-4" />
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button className="tech-btn-gradient gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -225,6 +240,22 @@ const Navbar = () => {
                 </>
               )}
             </button>
+            {!isAuthenticated && (
+              <div className="px-4 space-y-2">
+                <Link to="/login" className="block w-full">
+                  <Button variant="ghost" className="w-full gap-2">
+                    <LogIn className="h-4 w-4" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup" className="block w-full">
+                  <Button className="tech-btn-gradient w-full gap-2">
+                    <UserPlus className="h-4 w-4" />
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

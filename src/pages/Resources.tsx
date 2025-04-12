@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -9,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, BookOpen, Video, FileText, Code, Link as LinkIcon, Download, Star, Clock, Users, Calendar, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Sample resources data
 const learningResources = [
@@ -182,21 +182,38 @@ const Resources = () => {
       
       <main className="flex-grow py-6">
         <div className="container px-4 md:px-6">
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold mb-2">Learning Resources</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore educational materials, study guides, and community knowledge to enhance your skills.
-            </p>
-            
-            <div className="relative max-w-xl mx-auto mt-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search for resources..."
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-4xl font-bold bg-gradient-to-r from-tech-blue to-tech-purple bg-clip-text text-transparent mb-4"
+            >
+              Resources
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            >
+              Access learning materials, tools, and guides to enhance your skills.
+            </motion.p>
+          </motion.div>
+          
+          <div className="relative max-w-xl mx-auto mt-6">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search for resources..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           
           <Tabs defaultValue="learning" className="mb-8">
